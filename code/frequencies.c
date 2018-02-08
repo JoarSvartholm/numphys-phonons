@@ -40,9 +40,11 @@ void frequencies(double A, double B, double m, double *q, double *omega, double 
     if(omega2<0) omega2=0;
     omega[i] = sqrt(omega2);
 
-    eps[i]=gsl_matrix_get(evec,i,0);
-    eps[i+3]=gsl_matrix_get(evec,i,1);
-    eps[i+6]=gsl_matrix_get(evec,i,2);
+    if(eps != NULL){
+      eps[i]=gsl_matrix_get(evec,i,0);
+      eps[i+3]=gsl_matrix_get(evec,i,1);
+      eps[i+6]=gsl_matrix_get(evec,i,2);
+    }
   }
 
 }
