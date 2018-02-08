@@ -22,7 +22,7 @@ void frequencies(double A, double B, double m, double *q, double *omega, double 
     gsl_matrix_set(M,i,i,Mii);
   }
   for(int i = 0; i<N-1;i++){
-    Mi = 1/(2*m)*(A-B)*4*sin(M_PI*q[map(i+1)]*sin(M_PI*q[map(i)]));
+    Mi = 1/(2*m)*(A-B)*4*sin(M_PI*q[map(i+1)])*sin(M_PI*q[map(i)]);
     gsl_matrix_set(M,i+1,i,Mi);
   }
   Mi = 1/(2*m)*(A-B)*4*sin(M_PI*q[2])*sin(M_PI*q[0]);
