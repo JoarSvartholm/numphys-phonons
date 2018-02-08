@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <gsl/gsl_eigen.h>
+#include "frequencies.h"
 
 typedef struct {
   int substance;
@@ -112,7 +113,6 @@ int main(int argc, char const *argv[]) {
   printf("%e\n",A );
   printf("%e\n",B );
 
-  gsl_eigen_symm_workspace *w = gsl_eigen_symm_alloc(N);
 
   return 0;
 }

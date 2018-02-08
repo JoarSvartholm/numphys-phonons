@@ -4,7 +4,7 @@ XLIBS = -L. -lode
 LOADLIBES =  -L/usr/local/lib -lgsl -lgslcblas -lm
 CFLAGS = -g -I/usr/local/include
 OBJS = gsl-interface.o   models.o
-DEPS = gsl-interface.h models.h utilities.h $(LIBODE) Makefile
+DEPS = frequencies.h #$(LIBODE) Makefile
 
 PIC = -fPIC
 
@@ -13,6 +13,8 @@ PIC = -fPIC
 
 #%.o:%.c
 #	$(GCC) $(CFLAGS) -c  $(PIC) -Wall $(INCLUDE)  $< -o $@
+phonons: phonons.c $(DEPS)
+	$(CC) $(CFLAGS)  $(PIC) -Wall $(INCLUDE)  $<   -o $@ $(LOADLIBES)
 
 %:%.c #	 $(DEPS)
 	$(CC) $(CFLAGS)  $(PIC) -Wall $(INCLUDE)  $<   -o $@ $(LOADLIBES)
