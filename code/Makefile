@@ -13,7 +13,7 @@ PIC = -fPIC
 
 #%.o:%.c
 #	$(GCC) $(CFLAGS) -c  $(PIC) -Wall $(INCLUDE)  $< -o $@
-phonons: phonons.c $(DEPS)
+phonons: phonons.c #$(DEPS)
 	$(CC) $(CFLAGS)  $(PIC) -Wall $(INCLUDE)  $<   -o $@ $(LOADLIBES)
 
 %:%.c #	 $(DEPS)

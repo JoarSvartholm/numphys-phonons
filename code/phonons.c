@@ -18,19 +18,25 @@ typedef struct {
   double m;
 }params;
 
+typedef struct {
+  double q1[3];
+  double q2[3];
+}qvecs;
+
+int min(int A, int B){
+  if(A<B) {return A;}
+  else return B;
+}
+
 void check_input(int argc,char const *argv[],test_case *Case){
   //Test substance input
   if(strcmp(argv[1],"Ne")==0){
-    printf(" Ne funkar\n" );
     Case->substance=1;
   } else if(strcmp(argv[1],"Ar")==0){
-    printf("Ar funkar\n" );
     Case->substance=2;
   } else if(strcmp(argv[1],"Kr")==0){
-    printf("Kr funkar\n" );
     Case->substance=3;
   } else if(strcmp(argv[1],"Xe")==0){
-    printf("Xe funkar\n" );
     Case->substance=4;
   } else {
     fprintf(stderr, "Error in input. Not a valid substance: %s\n",argv[1] );
@@ -38,18 +44,47 @@ void check_input(int argc,char const *argv[],test_case *Case){
 
     //Test type input
     if(strcmp(argv[2],"omega")==0){
-      printf("omega funkar\n");
       Case->test = 1;
     }else if(strcmp(argv[2],"gamma")==0){
-      printf("gamma funkar\n");
       Case->test = 2;
     } else if(strcmp(argv[2],"cv")==0){
-      printf("cv funkar\n");
       Case->test = 3;
     } else{
       fprintf(stderr, "Error in input. Not a valid test case: %s\n", argv[2]);
       exit(1);
     }
+}
+
+void save_qvecs(int argc, char const *argv[],test_case *Case, qvecs *Q){
+  if(Case->test == 1 || Case->test == 2){
+    if(argc<6 || (argc>6 && argc<9)){
+      fprintf(stderr, "Error in input: not enough input parameters\n");
+      exit(1);
+    }
+    if(argc > 10){
+      fprintf(stderr, "Error in input: Too many input parameters\n");
+      exit(1);
+    }
+    if(argc == 10 && atoi(argv[9]) < 2){
+      fprintf(stderr, "Error in input: Cannot compute at %s points\n",argv[9]);
+      exit(1);
+    }
+
+    for(int i=3;i<6;i++){
+      Q->q1[i-3] = atof(argv[i]);
+    }
+    if(argc>6){
+      for(int i=6;i<9;i++){
+        Q->q2[i-6] = atof(argv[i]);
+      }
+    }
+    if(argc ==10){
+       Case->npoints = atoi(argv[9]);
+     } else if(argc == 6){
+       Case->npoints = 1;
+     } else Case->npoints = 11;
+
+  }
 }
 
 void set_params(int substance, params *par){
@@ -95,24 +130,30 @@ double compute_B(params *pars){
   return 12*pars->eps*(pow(pars->sigma,5)*r8 - pow(pars->sigma,11)*r14);
 }
 
+
 int main(int argc, char const *argv[]) {
 
   test_case Case;
   params pars;
-  int N = 3;
+  qvecs Q;
+  double omega;
+  double eps;
   double A,B;
 
   check_input(argc,argv,&Case);
 
   set_params(Case.substance,&pars);
 
+  save_qvecs(argc,argv,&Case,&Q);
   A= compute_A(&pars);
   B= compute_B(&pars);
-  printf("%e\n",pars.sigma );
-  printf("%e\n",pars.eps );
-  printf("%e\n",A );
-  printf("%e\n",B );
 
+  for(int i=0;i<Case.npoints;i++){
+    if(Case.npoints==1){
+      frequencies(A,B,pars.m,Q.q1,&omega,&eps);
+    }
+  }
+  printf("%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega,omega,omega );
 
   return 0;
 }
