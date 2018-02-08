@@ -36,7 +36,7 @@ void frequencies(double A, double B, double m, double *q, double *omega, double 
 
   /*save output*/
   for(int i=0;i<N;i++){
-    omega[i] = gsl_vector_get(eval,i);
+    omega[i] = sqrt(gsl_vector_get(eval,i));
 
     eps[i]=gsl_matrix_get(evec,i,0);
     eps[i+3]=gsl_matrix_get(evec,i,1);
