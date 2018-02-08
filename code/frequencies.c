@@ -9,7 +9,7 @@ int map(int i){
 void frequencies(double A, double B, double m, double *q, double *omega, double *eps){
 
   int N = 3;
-  double Mii,Mi;
+  double Mii,Mi,omega2;
 
   gsl_vector *eval = gsl_vector_alloc(N);
   gsl_matrix *evec = gsl_matrix_alloc(N,N);
@@ -36,7 +36,9 @@ void frequencies(double A, double B, double m, double *q, double *omega, double 
 
   /*save output*/
   for(int i=0;i<N;i++){
-    omega[i] = sqrt(gsl_vector_get(eval,i));
+    omega2 = gsl_vector_get(eval,i);
+    if(omega2<0) omega2=0;
+    omega[i] = sqrt(omega2);
 
     eps[i]=gsl_matrix_get(evec,i,0);
     eps[i+3]=gsl_matrix_get(evec,i,1);
