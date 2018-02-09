@@ -151,9 +151,9 @@ int main(int argc, char const *argv[]) {
   for(int i=0;i<Case.npoints;i++){
     if(Case.npoints==1){
       frequencies(A,B,pars.m,Q.q1,&omega,&eps);
+      printf("%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega,omega,omega);
     }
   }
-  printf("%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega,omega,omega );
 
   return 0;
 }

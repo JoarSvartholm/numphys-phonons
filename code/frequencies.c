@@ -13,7 +13,7 @@ void frequencies(double A, double B, double m, double *q, double *omega, double 
 
   gsl_vector *eval = gsl_vector_alloc(N);
   gsl_matrix *evec = gsl_matrix_alloc(N,N);
-  gsl_eigen_symm_workspace *w = gsl_eigen_symmv_alloc(N);
+  gsl_eigen_symmv_workspace *w = gsl_eigen_symmv_alloc(N);
   gsl_matrix *M = gsl_matrix_calloc(N,N);
 
   /*Construct matrix*/
