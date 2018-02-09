@@ -136,9 +136,9 @@ int main(int argc, char const *argv[]) {
   test_case Case;
   params pars;
   qvecs Q;
-  double omega;
-  double eps;
-  double A,B;
+  double omega[3];
+  double eps[9];
+  double A,B,q[3];
 
   check_input(argc,argv,&Case);
 
@@ -150,8 +150,14 @@ int main(int argc, char const *argv[]) {
 
   for(int i=0;i<Case.npoints;i++){
     if(Case.npoints==1){
-      frequencies(A,B,pars.m,Q.q1,&omega,&eps);
-      printf("%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega,omega,omega);
+      frequencies(A,B,pars.m,Q.q1,omega,eps);
+      printf("%f %f %f %e %e %e\n", Q.q1[0],Q.q1[1],Q.q1[2],omega[0],omega[1],omega[2]);
+    }else{
+        for(int j=0;j<3;j++){
+        q[j] = Q.q1[j]+i*(Q.q2[j]-Q.q1[j])/(Case.npoints-1);
+        }
+        frequencies(A,B,pars.m,q,omega,eps);
+        printf("%f %f %f %e %e %e\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
     }
   }
 
