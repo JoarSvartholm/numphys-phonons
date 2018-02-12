@@ -3,6 +3,7 @@
 #include <math.h>
 #include <string.h>
 #include <gsl/gsl_eigen.h>
+#include <gsl/gsl_const_MKSA.h>
 #include "frequencies.h"
 
 typedef struct {
@@ -152,6 +153,16 @@ double compute_B(params *pars){
   return 12*pars->eps*(pow(pars->sigma,6)*r8 - pow(pars->sigma,12)*r14);
 }
 
+double fj(double *omega, double T){
+  double sum=0;
+  double hbar = GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR;
+  double kb = GSL_CONST_MKSA_BOLTZMANN;
+  double frac = hbar/(kb*T);
+  for(int i=0;i<3;i++){
+    sum+=pow(frac*omega[i],2)*exp(frac*omega[i])*pow(exp(frac*omega[i])-1,-2);
+  }
+  return kb*sum;
+}
 
 int main(int argc, char const *argv[]) {
 
@@ -161,8 +172,10 @@ int main(int argc, char const *argv[]) {
   qvecs Q;
   double omega[3],domega[3];
   double eps[9];
-  double A,B,q[3],gamma[3];
+  double T,A,B,q[3],gamma[3],cv=0.0;
   double h = 0.001*pow(10,-10);
+  double q1[48],q2[48],q3[48],W[48];
+  FILE *f = fopen("qvekt","r");
 
   check_input(argc,argv,&Case);
 
@@ -177,13 +190,13 @@ switch (Case.test) {
   for(int i=0;i<Case.npoints;i++){
     if(Case.npoints==1){
       frequencies(A,B,pars.m,Q.q1,omega,eps);
-      printf("%.1f %.1f %.1f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega[0],omega[1],omega[2]);
+      printf("%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega[0],omega[1],omega[2]);
     }else{
       for(int j=0;j<3;j++){
         q[j] = Q.q1[j]+i*(Q.q2[j]-Q.q1[j])/(Case.npoints-1);
       }
       frequencies(A,B,pars.m,q,omega,eps);
-      printf("%.1f %.1f %.1f %f %f %f\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
+      printf("%f %f %f %f %f %f\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
     }
   }
     break;
@@ -202,7 +215,7 @@ switch (Case.test) {
       gamma[j] = domega[j]*(pars.r/3);
       }
 
-      printf("%.1f %.1f %.1f %f %f %f \n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
+      printf("%f %f %f %f %f %f \n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
     }
     }else{
       for(int j=0;j<3;j++){
@@ -218,16 +231,35 @@ switch (Case.test) {
       gamma[j] = domega[j]*(pars.r/3);
       }
       frequencies(A,B,pars.m,q,omega,eps);
-      printf("%.1f %.1f %.1f %f %f %f\n", q[0],q[1],q[2],gamma[0],gamma[1],gamma[2]);
+      printf("%f %f %f %f %f %f\n", q[0],q[1],q[2],gamma[0],gamma[1],gamma[2]);
     }
   }
     break;
 
   case 3:
-    printf("computing cv from %f at %d points\n",Q.q1[0],Case.npoints );
+    if(Case.npoints==1){
+      for(int j=0;j<48;j++){
+        fscanf(f,"%lf %lf %lf %lf",&q[0],&q[1],&q[2],&W[j]);
+        frequencies(A,B,pars.m,q,omega,eps);
+        cv+= 0.5/1000*pow(sqrt(2)/pars.r,3)*W[j]*fj(omega,Q.q1[0]);
+      }
+      printf("%f %f\n", Q.q1[0],cv );
+    }else{
+      for(int i=0;i<Case.npoints;i++){
+      T = Q.q1[0] +i*(Q.q2[0]-Q.q1[0])/(Case.npoints-1);
+        for(int j=0;j<48;j++){
+          fscanf(f,"%lf %lf %lf %lf",&q[0],&q[1],&q[2],&W[j]);
+          frequencies(A,B,pars.m,q,omega,eps);
+          cv+= 0.5/1000*pow(sqrt(2)/pars.r,3)*W[j]*fj(omega,T);
+        }
+        printf("%f %f\n", Q.q1[0],cv );
+      }
+    }
+
     break;
 
   }
+  fclose(f);
 
   return 0;
 }
