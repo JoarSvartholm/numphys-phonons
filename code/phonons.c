@@ -245,14 +245,20 @@ switch (Case.test) {
       }
       printf("%f %f\n", Q.q1[0],cv );
     }else{
+      for(int i=0;i<48;i++){
+        fscanf(f,"%lf %lf %lf %lf",&q1[i],&q2[i],&q3[i],&W[i]);
+      }
       for(int i=0;i<Case.npoints;i++){
       T = Q.q1[0] +i*(Q.q2[0]-Q.q1[0])/(Case.npoints-1);
+      cv=0;
         for(int j=0;j<48;j++){
-          fscanf(f,"%lf %lf %lf %lf",&q[0],&q[1],&q[2],&W[j]);
+          q[0]=q1[j];
+          q[1]=q2[j];
+          q[2]=q3[j];
           frequencies(A,B,pars.m,q,omega,eps);
           cv+= 0.5/1000*pow(sqrt(2)/pars.r,3)*W[j]*fj(omega,T);
         }
-        printf("%f %f\n", Q.q1[0],cv );
+        printf("%f %f\n", T,cv );
       }
     }
 
