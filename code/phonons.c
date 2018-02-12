@@ -155,14 +155,7 @@ double compute_B(params *pars){
 
 int main(int argc, char const *argv[]) {
 
-  char fname[64];
 
-  if(argc>9){
-    snprintf(fname,64,"../data/phonons_%s_%s_%s%s%s_n=%s.data",argv[1],argv[2],argv[6],argv[7],argv[8],argv[9]);
-  }else{
-    snprintf(fname,64,"../data/phonons_%s_%s.data",argv[1],argv[2]);
-  }
-  FILE *f = fopen(fname,"w");
   test_case Case;
   params pars;
   qvecs Q;
@@ -185,14 +178,12 @@ switch (Case.test) {
     if(Case.npoints==1){
       frequencies(A,B,pars.m,Q.q1,omega,eps);
       printf("%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega[0],omega[1],omega[2]);
-      fprintf(f,"%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega[0],omega[1],omega[2]);
     }else{
       for(int j=0;j<3;j++){
         q[j] = Q.q1[j]+i*(Q.q2[j]-Q.q1[j])/(Case.npoints-1);
       }
       frequencies(A,B,pars.m,q,omega,eps);
       printf("%f %f %f %f %f %f\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
-      fprintf(f,"%f %f %f %f %f %f\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
     }
   }
     break;
@@ -211,7 +202,6 @@ switch (Case.test) {
       }
 
       printf("%f %f %f %f %f %f \n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
-      fprintf(f,"%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
     }else{
       for(int j=0;j<3;j++){
         q[j] = Q.q1[j]+i*(Q.q2[j]-Q.q1[j])/(Case.npoints-1);
@@ -227,7 +217,6 @@ switch (Case.test) {
       }
       frequencies(A,B,pars.m,q,omega,eps);
       printf("%f %f %f %f %f %f\n", q[0],q[1],q[2],gamma[0],gamma[1],gamma[2]);
-      fprintf(f,"%f %f %f %f %f %f\n", q[0],q[1],q[2],gamma[0],gamma[1],gamma[2]);
     }
   }
     break;
@@ -236,12 +225,7 @@ switch (Case.test) {
     printf("computing cv from %f at %d points\n",Q.q1[0],Case.npoints );
     break;
 
-
-
-
-
   }
-  fclose(f);
 
   return 0;
 }
