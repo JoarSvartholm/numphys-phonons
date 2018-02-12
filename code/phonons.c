@@ -191,6 +191,7 @@ switch (Case.test) {
   case 2:
     for(int i=0;i<Case.npoints;i++){
     if(Case.npoints==1){
+      if(Q.q1[0] != 0 || Q.q1[1] != 0 || Q.q1[2] !=   0){
       pars.r+=h;
       frequencies(compute_A(&pars),compute_B(&pars),pars.m,Q.q1,domega,eps);
       pars.r-=2*h;
@@ -202,6 +203,7 @@ switch (Case.test) {
       }
 
       printf("%f %f %f %f %f %f \n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
+    }
     }else{
       for(int j=0;j<3;j++){
         q[j] = Q.q1[j]+i*(Q.q2[j]-Q.q1[j])/(Case.npoints-1);
