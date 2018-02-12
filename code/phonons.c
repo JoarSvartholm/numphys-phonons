@@ -3,7 +3,6 @@
 #include <math.h>
 #include <string.h>
 #include <gsl/gsl_eigen.h>
-#include <gsl/gsl_const_MKSA.h>
 #include "frequencies.h"
 
 typedef struct {
@@ -155,8 +154,8 @@ double compute_B(params *pars){
 
 double fj(double *omega, double T){
   double sum=0;
-  double hbar = GSL_CONST_MKSA_PLANCKS_CONSTANT_HBAR;
-  double kb = GSL_CONST_MKSA_BOLTZMANN;
+  double hbar = 1.054571800*pow(10,-34);
+  double kb = 1.38064852*pow(10,-23);
   double frac = hbar/(kb*T);
   for(int i=0;i<3;i++){
     sum+=pow(frac*omega[i],2)*exp(frac*omega[i])*pow(exp(frac*omega[i])-1,-2);
