@@ -83,6 +83,28 @@ void save_qvecs(int argc, char const *argv[],test_case *Case, qvecs *Q){
      } else if(argc == 6){
        Case->npoints = 1;
      } else Case->npoints = 11;
+  } else{
+    if(argc<4){
+      fprintf(stderr, "Error in input: not enough input parameters\n");
+      exit(1);
+    }
+    if(argc > 6){
+      fprintf(stderr, "Error in input: Too many input parameters\n");
+      exit(1);
+    }
+    if(argc == 6 && atoi(argv[5]) < 2){
+      fprintf(stderr, "Error in input: Cannot compute at %s points\n",argv[5]);
+      exit(1);
+    }
+    Q->q1[0] = atof(argv[3]);
+    if(argc>4){
+      Q->q2[0] = atof(argv[4]);
+    }
+    if(argc==6){
+      Case->npoints = atoi(argv[5]);
+    } else if(argc==4){
+      Case->npoints=1;
+    } else Case-> npoints = 11;
 
   }
 }
@@ -185,23 +207,33 @@ switch (Case.test) {
       pars.r+=h;
       for(int j=0;j<3;j++){
       domega[j] = -(log(domega[j])-log(omega[j]))/(2*h);
-      gamma[j] = domega[j]*(-pars.r/3);
+      gamma[j] = domega[j]*(pars.r/3);
       }
+
       printf("%f %f %f %f %f %f \n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
       fprintf(f,"%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
     }else{
       for(int j=0;j<3;j++){
         q[j] = Q.q1[j]+i*(Q.q2[j]-Q.q1[j])/(Case.npoints-1);
       }
+      pars.r+=h;
+      frequencies(compute_A(&pars),compute_B(&pars),pars.m,q,domega,eps);
+      pars.r-=2*h;
+      frequencies(compute_A(&pars),compute_B(&pars),pars.m,q,omega,eps);
+      pars.r+=h;
+      for(int j=0;j<3;j++){
+      domega[j] = -(log(domega[j])-log(omega[j]))/(2*h);
+      gamma[j] = domega[j]*(pars.r/3);
+      }
       frequencies(A,B,pars.m,q,omega,eps);
-      printf("%f %f %f %f %f %f\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
-      fprintf(f,"%f %f %f %f %f %f\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
+      printf("%f %f %f %f %f %f\n", q[0],q[1],q[2],gamma[0],gamma[1],gamma[2]);
+      fprintf(f,"%f %f %f %f %f %f\n", q[0],q[1],q[2],gamma[0],gamma[1],gamma[2]);
     }
   }
     break;
 
   case 3:
-    printf("testing cv\n" );
+    printf("computing cv from %f at %d points\n",Q.q1[0],Case.npoints );
     break;
 
 
