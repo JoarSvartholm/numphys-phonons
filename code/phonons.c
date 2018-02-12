@@ -143,13 +143,13 @@ void set_params(int substance, params *par){
 double compute_A(params *pars){
   double r14 = pow(pars->r,-14);
   double r8 = pow(pars->r,-8);
-  return 12*pars->eps*(13*pow(pars->sigma,11)*r14-7*pow(pars->sigma,5)*r8);
+  return 12*pars->eps*(13*pow(pars->sigma,12)*r14-7*pow(pars->sigma,6)*r8);
 }
 
 double compute_B(params *pars){
   double r14 = pow(pars->r,-14);
   double r8 = pow(pars->r,-8);
-  return 12*pars->eps*(pow(pars->sigma,5)*r8 - pow(pars->sigma,11)*r14);
+  return 12*pars->eps*(pow(pars->sigma,6)*r8 - pow(pars->sigma,12)*r14);
 }
 
 
@@ -177,13 +177,13 @@ switch (Case.test) {
   for(int i=0;i<Case.npoints;i++){
     if(Case.npoints==1){
       frequencies(A,B,pars.m,Q.q1,omega,eps);
-      printf("%f %f %f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega[0],omega[1],omega[2]);
+      printf("%.1f %.1f %.1f %f %f %f\n", Q.q1[0],Q.q1[1],Q.q1[2],omega[0],omega[1],omega[2]);
     }else{
       for(int j=0;j<3;j++){
         q[j] = Q.q1[j]+i*(Q.q2[j]-Q.q1[j])/(Case.npoints-1);
       }
       frequencies(A,B,pars.m,q,omega,eps);
-      printf("%f %f %f %f %f %f\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
+      printf("%.1f %.1f %.1f %f %f %f\n", q[0],q[1],q[2],omega[0],omega[1],omega[2]);
     }
   }
     break;
@@ -202,7 +202,7 @@ switch (Case.test) {
       gamma[j] = domega[j]*(pars.r/3);
       }
 
-      printf("%f %f %f %f %f %f \n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
+      printf("%.1f %.1f %.1f %f %f %f \n", Q.q1[0],Q.q1[1],Q.q1[2],gamma[0],gamma[1],gamma[2]);
     }
     }else{
       for(int j=0;j<3;j++){
@@ -218,7 +218,7 @@ switch (Case.test) {
       gamma[j] = domega[j]*(pars.r/3);
       }
       frequencies(A,B,pars.m,q,omega,eps);
-      printf("%f %f %f %f %f %f\n", q[0],q[1],q[2],gamma[0],gamma[1],gamma[2]);
+      printf("%.1f %.1f %.1f %f %f %f\n", q[0],q[1],q[2],gamma[0],gamma[1],gamma[2]);
     }
   }
     break;
