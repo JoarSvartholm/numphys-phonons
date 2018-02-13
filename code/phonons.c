@@ -172,7 +172,7 @@ int main(int argc, char const *argv[]) {
   double omega[3],domega[3];
   double eps[9];
   double T,A,B,q[3],gamma[3],cv=0.0;
-  double h = 0.001*pow(10,-10);
+  double h = 0.000001*pow(10,-10);
   double q1[48],q2[48],q3[48],W[48];
   FILE *f = fopen("qvekt","r");
 
