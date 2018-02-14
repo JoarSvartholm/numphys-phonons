@@ -1,12 +1,31 @@
 \section{The heat capacity}
 
-The heat capacity $C_v/V$ was calculated as a function of temperature for Ar, Ne, Kr and Xe and plotted which is shown in Fig. \ref{fig:heat}. As we can see in the figure the heat capacity reaches a high temperature limit. That is, a limit where the heat capacity is independent of temperature. This is predicted by the Dulong-Petit law
+The heat capacity $C_V/V$ was calculated as a function of temperature for Ar, Ne, Kr and Xe and plotted which is shown in Fig. \ref{fig:heat}. As we can see in the figure the heat capacity reaches a high temperature limit. That is, a limit where the heat capacity is independent of temperature. This is predicted by the Dulong-Petit law
 
 \begin{equation*}
   C_V = M k_B
 \end{equation*}
 
-where $M$ is the total degrees of freedom and $k_B$ is the boltzmann constant.
+where $M$ is the total degrees of freedom and $k_B$ is the boltzmann constant. The total degrees of freedom is for monatomic gases $3N$, where $N$ is the number of atoms. This yields
+
+\begin{equation*}
+  C_V / V = 3k_B \frac{N}{V} = 3k_B \frac{4}{V_c}
+\end{equation*}
+
+where $V_c$ is the volume of a unit cell and the factor 4 comes from the fact that there is 4 lattice points in a unit cell for a fcc-lattice. The analytic heat capacity is tabulated together with the limit value from the computed values in Tab. \ref{tab:heat}.
+
+\begin{table}
+\centering
+  \caption{Heat capacity in the high temperature limit.}
+  \label{tab:heat}
+  \begin{tabular}{l|rrr}
+    & Analytic & Numeric & error[\%] \\ \hline
+    Ne & 1863056 & 186009 & 0.16\\
+    Ar &  1112820 &  1109164 & 0.32\\
+    Kr & 920624 &  918752 & 0.20\\
+    Xe &  719237 & 718067 & 0.16
+  \end{tabular}
+\end{table}
 
 \begin{figure}[H]
   \centering

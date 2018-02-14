@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-savePlots = 1
+savePlots = 0
 showPlots = 0
 
 T_Ar,CV_Ar= np.genfromtxt("../data/Ar_cv.data",unpack=True)
@@ -43,21 +43,25 @@ rAr =  3.7477*A
 rKr =   3.9922*A
 rXe =    4.3346*A
 
-VNe = (0.2*2**0.5*np.pi/rNe)**3/2
-VAr = (0.2*2**0.5*np.pi/rAr)**3/2
-VKr = (0.2*2**0.5*np.pi/rKr)**3/2
-VXe = (0.2*2**0.5*np.pi/rXe)**3/2
+VNe = (2*rNe/2**0.5)**3
+VAr = (2**0.5*rAr)**3
+VKr = (2**0.5*rKr)**3
+VXe = (2**0.5*rXe)**3
 
-CvNe = 3 * kb * VNe /(2*np.pi)**3
-CvAr = 3 * kb * VAr /(2*np.pi)**3
-CvKr = 3 * kb * VKr /(2*np.pi)**3
-CvXe = 3 * kb * VXe /(2*np.pi)**3
+CvNe = 3 * kb * 4 / VNe
+CvAr = 3 * kb * 4 / VAr
+CvKr = 3 * kb * 4 / VKr
+CvXe = 3 * kb * 4 / VXe
 
 print(CvNe)
 print(CV_Ne[-1])
+print((CvNe-CV_Ne[-1])/CvNe)
 print(CvAr)
 print(CV_Ar[-1])
+print((CvAr-CV_Ar[-1])/CvAr)
 print(CvKr)
 print(CV_Kr[-1])
+print((CvKr-CV_Kr[-1])/CvKr)
 print(CvXe)
 print(CV_Xe[-1])
+print((CvXe-CV_Xe[-1])/CvXe)
